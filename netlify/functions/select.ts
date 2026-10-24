@@ -23,7 +23,7 @@ export async function handler(event: NetlifyEvent): Promise<NetlifyResponse> {
   }
 
   try {
-    const body = parseBody(event) as SelectBody;
+    const body = parseBody(event) as unknown as SelectBody;
     const { sceneId, videoIds, imageIds, scenes } = body;
 
     if (!scenes || !Array.isArray(scenes)) {

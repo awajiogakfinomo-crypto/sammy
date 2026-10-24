@@ -21,7 +21,7 @@ export async function handler(event: NetlifyEvent): Promise<NetlifyResponse> {
   }
 
   try {
-    const body = parseBody(event) as AnalyzeBody;
+    const body = parseBody(event) as unknown as AnalyzeBody;
     const { script } = body;
 
     if (!script || typeof script !== 'string') {

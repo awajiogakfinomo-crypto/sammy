@@ -21,7 +21,7 @@ export async function handler(event: NetlifyEvent): Promise<NetlifyResponse> {
   }
 
   try {
-    const body = parseBody(event) as SearchAllBody;
+    const body = parseBody(event) as unknown as SearchAllBody;
     const { scenes } = body;
 
     if (!scenes || !Array.isArray(scenes)) {
