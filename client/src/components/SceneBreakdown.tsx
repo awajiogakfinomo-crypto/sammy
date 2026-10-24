@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ScriptAnalysisResult, Scene, StockVideo, StockImage } from '../types'
+import { ScriptAnalysisResult, Scene } from '../types'
 import VideoCard from './VideoCard'
 import ImageCard from './ImageCard'
 

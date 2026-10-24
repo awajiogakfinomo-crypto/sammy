@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { StockVideo } from '../types'
 
 interface VideoCardProps {
@@ -8,15 +7,11 @@ interface VideoCardProps {
 }
 
 export default function VideoCard({ video, selected, onSelect }: VideoCardProps) {
-  const [hovered, setHovered] = useState(false)
-
   return (
     <div
       className={`relative group rounded-lg overflow-hidden border-2 transition-all ${
         selected ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
       }`}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
     >
       <div className="aspect-video relative bg-gray-100">
         <img
