@@ -5,6 +5,12 @@ import type { NetlifyEvent, NetlifyResponse, Scene, SearchResult } from './utils
 import { StockApiManager } from './services/stockApis';
 import { getApiConfig, jsonResponse, errorResponse, handleOptions, parseBody } from './utils/helpers';
 
+interface SearchBody {
+  sceneId: string;
+  queries?: string[];
+  scenes: Scene[];
+}
+
 export async function handler(event: NetlifyEvent): Promise<NetlifyResponse> {
   // Handle CORS preflight
   if (event.httpMethod === 'OPTIONS') {
@@ -17,7 +23,7 @@ export async function handler(event: NetlifyEvent): Promise<NetlifyResponse> {
   }
 
   try {
-    const body = parseBody(event);
+    const body = parseBody(event) as SearchBody;
     const { sceneId, queries, scenes } = body;
 
     if (!scenes || !Array.isArray(scenes)) {

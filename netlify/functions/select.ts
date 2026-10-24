@@ -4,6 +4,13 @@
 import type { NetlifyEvent, NetlifyResponse, Scene } from './utils/types';
 import { jsonResponse, errorResponse, handleOptions, parseBody } from './utils/helpers';
 
+interface SelectBody {
+  sceneId: string;
+  videoIds?: string[];
+  imageIds?: string[];
+  scenes: Scene[];
+}
+
 export async function handler(event: NetlifyEvent): Promise<NetlifyResponse> {
   // Handle CORS preflight
   if (event.httpMethod === 'OPTIONS') {
@@ -16,7 +23,7 @@ export async function handler(event: NetlifyEvent): Promise<NetlifyResponse> {
   }
 
   try {
-    const body = parseBody(event);
+    const body = parseBody(event) as SelectBody;
     const { sceneId, videoIds, imageIds, scenes } = body;
 
     if (!scenes || !Array.isArray(scenes)) {
