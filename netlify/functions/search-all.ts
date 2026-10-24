@@ -1,7 +1,7 @@
 // Netlify Function: POST /api/search-all
 // Search footage for all scenes
 
-import type { NetlifyEvent, NetlifyResponse, Scene, SearchResult } from './utils/types';
+import type { NetlifyEvent, NetlifyResponse, Scene, SearchResult, StockVideo, StockImage } from './utils/types';
 import { StockApiManager } from './services/stockApis';
 import { getApiConfig, jsonResponse, errorResponse, handleOptions, parseBody } from './utils/helpers';
 
@@ -39,8 +39,8 @@ export async function handler(event: NetlifyEvent): Promise<NetlifyResponse> {
           allResults.push(...results);
         }
 
-        const videoMap = new Map<string, any>();
-        const imageMap = new Map<string, any>();
+        const videoMap = new Map<string, StockVideo>();
+        const imageMap = new Map<string, StockImage>();
 
         for (const result of allResults) {
           for (const video of result.videos) {

@@ -4,7 +4,7 @@
 import { PexelsService } from './pexels';
 import { PixabayService } from './pixabay';
 import { UnsplashService } from './unsplash';
-import type { SearchResult, ApiConfig } from '../../utils/types';
+import type { SearchResult, ApiConfig, StockVideo, StockImage } from '../../utils/types';
 
 export class StockApiManager {
   private pexels: PexelsService;
@@ -29,18 +29,18 @@ export class StockApiManager {
       .map(r => r.value);
   }
 
-  async searchVideos(query: string) {
+  async searchVideos(query: string): Promise<StockVideo[]> {
     const results = await Promise.allSettled([
       this.pexels.searchVideos(query),
       this.pixabay.searchVideos(query),
     ]);
 
     return results
-      .filter((r): r is PromiseFulfilledResult<any[]> => r.status === 'fulfilled')
+      .filter((r): r is PromiseFulfilledResult<StockVideo[]> => r.status === 'fulfilled')
       .flatMap(r => r.value);
   }
 
-  async searchImages(query: string) {
+  async searchImages(query: string): Promise<StockImage[]> {
     const results = await Promise.allSettled([
       this.pexels.searchImages(query),
       this.pixabay.searchImages(query),
@@ -48,7 +48,7 @@ export class StockApiManager {
     ]);
 
     return results
-      .filter((r): r is PromiseFulfilledResult<any[]> => r.status === 'fulfilled')
+      .filter((r): r is PromiseFulfilledResult<StockImage[]> => r.status === 'fulfilled')
       .flatMap(r => r.value);
   }
 }

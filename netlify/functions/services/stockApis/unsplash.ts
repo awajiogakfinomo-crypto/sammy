@@ -3,6 +3,21 @@
 import axios from 'axios';
 import type { StockImage, SearchResult, ApiConfig } from '../../utils/types';
 
+// Unsplash API response types
+interface UnsplashPhoto {
+  id: string;
+  links: { html: string };
+  urls: { small: string; raw: string };
+  width: number;
+  height: number;
+  user: { name: string; links: { html: string } };
+  tags?: Array<{ title: string }>;
+}
+
+interface UnsplashSearchResponse {
+  results: UnsplashPhoto[];
+}
+
 export class UnsplashService {
   private accessKey: string;
   private baseUrl: string;
@@ -16,12 +31,12 @@ export class UnsplashService {
     if (!this.accessKey) return [];
 
     try {
-      const response = await axios.get(`${this.baseUrl}/search/photos`, {
+      const response = await axios.get<UnsplashSearchResponse>(`${this.baseUrl}/search/photos`, {
         headers: { Authorization: `Client-ID ${this.accessKey}` },
         params: { query, per_page: perPage, orientation: 'landscape' },
       });
 
-      return response.data.results.map((photo: any) => ({
+      return response.data.results.map((photo: UnsplashPhoto) => ({
         id: `unsplash-image-${photo.id}`,
         source: 'unsplash' as const,
         url: photo.links.html,
@@ -30,7 +45,7 @@ export class UnsplashService {
         height: photo.height,
         photographer: photo.user.name,
         photographerUrl: photo.user.links.html,
-        tags: photo.tags?.map((t: any) => t.title) || [],
+        tags: photo.tags?.map((t) => t.title) || [],
         downloadUrl: photo.urls.raw + '&force=true',
       }));
     } catch (error) {

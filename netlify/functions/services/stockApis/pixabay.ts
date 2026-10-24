@@ -3,6 +3,51 @@
 import axios from 'axios';
 import type { StockVideo, StockImage, SearchResult, ApiConfig } from '../../utils/types';
 
+// Pixabay API response types
+interface PixabayVideoFile {
+  width: number;
+  height: number;
+  url: string;
+}
+
+interface PixabayVideoFiles {
+  large?: PixabayVideoFile;
+  medium?: PixabayVideoFile;
+  small?: PixabayVideoFile;
+  tiny?: PixabayVideoFile;
+}
+
+interface PixabayVideo {
+  id: number;
+  pageURL: string;
+  picture_id?: string;
+  user: string;
+  userImageURL: string;
+  tags: string;
+  duration: number;
+  videos: PixabayVideoFiles;
+}
+
+interface PixabayPhoto {
+  id: number;
+  pageURL: string;
+  webformatURL: string;
+  imageWidth: number;
+  imageHeight: number;
+  user: string;
+  userImageURL: string;
+  tags: string;
+  largeImageURL: string;
+}
+
+interface PixabayVideoResponse {
+  hits: PixabayVideo[];
+}
+
+interface PixabayPhotoResponse {
+  hits: PixabayPhoto[];
+}
+
 export class PixabayService {
   private apiKey: string;
   private baseUrl: string;
@@ -16,7 +61,7 @@ export class PixabayService {
     if (!this.apiKey) return [];
 
     try {
-      const response = await axios.get(`${this.baseUrl}/videos/`, {
+      const response = await axios.get<PixabayVideoResponse>(`${this.baseUrl}/videos/`, {
         params: {
           key: this.apiKey,
           q: query,
@@ -26,7 +71,7 @@ export class PixabayService {
         },
       });
 
-      return response.data.hits.map((video: any) => {
+      return response.data.hits.map((video: PixabayVideo) => {
         const videoFiles = video.videos;
         const bestQuality = videoFiles.large || videoFiles.medium || videoFiles.small || videoFiles.tiny;
 
@@ -55,7 +100,7 @@ export class PixabayService {
     if (!this.apiKey) return [];
 
     try {
-      const response = await axios.get(`${this.baseUrl}/`, {
+      const response = await axios.get<PixabayPhotoResponse>(`${this.baseUrl}/`, {
         params: {
           key: this.apiKey,
           q: query,
@@ -65,7 +110,7 @@ export class PixabayService {
         },
       });
 
-      return response.data.hits.map((photo: any) => ({
+      return response.data.hits.map((photo: PixabayPhoto) => ({
         id: `pixabay-image-${photo.id}`,
         source: 'pixabay' as const,
         url: photo.pageURL,

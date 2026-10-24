@@ -3,6 +3,45 @@
 import axios from 'axios';
 import type { StockVideo, StockImage, SearchResult, ApiConfig } from '../../utils/types';
 
+// Pexels API response types
+interface PexelsVideoFile {
+  width: number;
+  height: number;
+  quality: string;
+  link: string;
+}
+
+interface PexelsVideo {
+  id: number;
+  url: string;
+  image: string;
+  width: number;
+  height: number;
+  duration: number;
+  user: { name: string; url: string };
+  tags: Array<{ name: string }>;
+  video_files: PexelsVideoFile[];
+}
+
+interface PexelsPhoto {
+  id: number;
+  url: string;
+  src: { medium: string; original: string };
+  width: number;
+  height: number;
+  photographer: string;
+  photographer_url: string;
+  tags?: Array<{ name: string }>;
+}
+
+interface PexelsVideoResponse {
+  videos: PexelsVideo[];
+}
+
+interface PexelsPhotoResponse {
+  photos: PexelsPhoto[];
+}
+
 export class PexelsService {
   private apiKey: string;
   private baseUrl: string;
@@ -16,12 +55,12 @@ export class PexelsService {
     if (!this.apiKey) return [];
 
     try {
-      const response = await axios.get(`${this.baseUrl}/videos/search`, {
+      const response = await axios.get<PexelsVideoResponse>(`${this.baseUrl}/videos/search`, {
         headers: { Authorization: this.apiKey },
         params: { query, per_page: perPage, orientation: 'landscape' },
       });
 
-      return response.data.videos.map((video: any) => ({
+      return response.data.videos.map((video: PexelsVideo) => ({
         id: `pexels-video-${video.id}`,
         source: 'pexels' as const,
         url: video.url,
@@ -31,11 +70,11 @@ export class PexelsService {
         duration: video.duration,
         photographer: video.user.name,
         photographerUrl: video.user.url,
-        tags: video.tags.map((t: any) => t.name),
+        tags: video.tags.map((t) => t.name),
         downloadUrl: video.video_files
-          .sort((a: any, b: any) => b.width - a.width)[0]?.link || '',
+          .sort((a, b) => b.width - a.width)[0]?.link || '',
         previewUrl: video.video_files
-          .find((f: any) => f.quality === 'hd')?.link ||
+          .find((f) => f.quality === 'hd')?.link ||
           video.video_files[0]?.link,
       }));
     } catch (error) {
@@ -48,12 +87,12 @@ export class PexelsService {
     if (!this.apiKey) return [];
 
     try {
-      const response = await axios.get(`${this.baseUrl}/search`, {
+      const response = await axios.get<PexelsPhotoResponse>(`${this.baseUrl}/search`, {
         headers: { Authorization: this.apiKey },
         params: { query, per_page: perPage, orientation: 'landscape' },
       });
 
-      return response.data.photos.map((photo: any) => ({
+      return response.data.photos.map((photo: PexelsPhoto) => ({
         id: `pexels-image-${photo.id}`,
         source: 'pexels' as const,
         url: photo.url,
@@ -62,7 +101,7 @@ export class PexelsService {
         height: photo.height,
         photographer: photo.photographer,
         photographerUrl: photo.photographer_url,
-        tags: photo.tags?.map((t: any) => t.name) || [],
+        tags: photo.tags?.map((t) => t.name) || [],
         downloadUrl: photo.src.original,
       }));
     } catch (error) {
