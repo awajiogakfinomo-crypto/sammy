@@ -1,7 +1,7 @@
 // Unsplash API Service for Netlify Functions
 
 import axios from 'axios';
-import type { StockImage, SearchResult, ApiConfig } from '../../../utils/types';
+import type { StockImage, SearchResult, ApiConfig } from '../../utils/types';
 
 export class UnsplashService {
   private accessKey: string;

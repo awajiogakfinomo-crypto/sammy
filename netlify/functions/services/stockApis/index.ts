@@ -4,7 +4,7 @@
 import { PexelsService } from './pexels';
 import { PixabayService } from './pixabay';
 import { UnsplashService } from './unsplash';
-import type { SearchResult, ApiConfig } from '../../../utils/types';
+import type { SearchResult, ApiConfig } from '../../utils/types';
 
 export class StockApiManager {
   private pexels: PexelsService;

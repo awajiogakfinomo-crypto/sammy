@@ -1,7 +1,7 @@
 // Pixabay API Service for Netlify Functions
 
 import axios from 'axios';
-import type { StockVideo, StockImage, SearchResult, ApiConfig } from '../../../utils/types';
+import type { StockVideo, StockImage, SearchResult, ApiConfig } from '../../utils/types';
 
 export class PixabayService {
   private apiKey: string;

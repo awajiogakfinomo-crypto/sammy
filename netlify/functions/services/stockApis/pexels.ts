@@ -1,7 +1,7 @@
 // Pexels API Service for Netlify Functions
 
 import axios from 'axios';
-import type { StockVideo, StockImage, SearchResult, ApiConfig } from '../../../utils/types';
+import type { StockVideo, StockImage, SearchResult, ApiConfig } from '../../utils/types';
 
 export class PexelsService {
   private apiKey: string;

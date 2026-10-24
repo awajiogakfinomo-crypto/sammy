@@ -4,7 +4,7 @@
 import archiver from 'archiver';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
-import type { DownloadRequest, DownloadResult, Scene, StockVideo, StockImage } from '../../../utils/types';
+import type { DownloadRequest, DownloadResult, Scene, StockVideo, StockImage } from '../../utils/types';
 
 export class DownloadService {
   /**
@@ -16,8 +16,8 @@ export class DownloadService {
       throw new Error('Scene not found');
     }
 
-    const selectedVideos = scene.videos.filter(v => request.videoIds.includes(v.id));
-    const selectedImages = scene.images.filter(i => request.imageIds.includes(i.id));
+    const selectedVideos = scene.videos.filter((v: StockVideo) => request.videoIds.includes(v.id));
+    const selectedImages = scene.images.filter((i: StockImage) => request.imageIds.includes(i.id));
 
     if (selectedVideos.length === 0 && selectedImages.length === 0) {
       throw new Error('No files selected for download');
