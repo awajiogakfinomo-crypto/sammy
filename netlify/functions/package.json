@@ -1,0 +1,24 @@
+{
+  "name": "stock-footage-finder-functions",
+  "version": "1.0.0",
+  "description": "Netlify Functions for Stock Footage Finder",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx watch"
+  },
+  "dependencies": {
+    "archiver": "^7.0.1",
+    "axios": "^1.7.2",
+    "compromise": "^14.14.0",
+    "uuid": "^10.0.0"
+  },
+  "devDependencies": {
+    "@types/archiver": "^6.0.2",
+    "@types/compromise": "^11.13.0",
+    "@types/node": "^20.14.2",
+    "@types/uuid": "^10.0.0",
+    "tsx": "^4.16.2",
+    "typescript": "^5.5.2"
+  }
+}
